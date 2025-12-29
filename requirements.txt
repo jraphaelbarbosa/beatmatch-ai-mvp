@@ -1,3 +1,10 @@
 pandas
 playwright
 python-dotenv
+google-generativeai>=0.8.3
+langchain
+langchain-google-genai
+python-dotenv
+streamlit
+psycopg2-binary
+tabulate
