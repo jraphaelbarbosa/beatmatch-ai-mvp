@@ -1,31 +1,52 @@
-# Spotify Artist ➡️ Instagram Extractor 📸
+# 🎧 BeatMatchAI (MVP)
 
-> **Turn a list of Spotify Artists into a list of official Instagram contacts.**
+**Sonic Identity Matching System for Music Producers**
 
-[Ler em Português](README.pt-br.md)
+BeatMatchAI is an intelligent tool designed to streamline the music outreach process. It uses advanced AI Agents to listen to your beats, analyze their "Sonic DNA", and match them with the most suitable artists from your database.
 
-## 🎯 What this tool does
-If you have a list of musicians on Spotify, you often need to contact them. This tool automates the process of finding their **official Instagram profile** linked in their Spotify bio.
-
-It does **not** guess usernames. It extracts the exact link the artist pinned on their profile.
-
-## ⚙️ How it works (The "Magic")
-Traditional scrapers fail on Spotify because of "Lazy Loading" (buttons don't exist until you click them).
-**This tool uses Network Interception.** It listens to the hidden JSON traffic between the Spotify Web Player and their API. When you visit an artist page, the tool "steals" the social links from the data stream before the page even loads.
-
-**Input:** A CSV with Spotify Artist IDs.
-**Output:** A CSV with verified Instagram URLs.
+Stop sending DMs in the dark. Let AI find the perfect match for your sound.
 
 ## 🚀 Key Features
-* **100% Verified Links:** Only gets links provided by the artist themselves.
-* **Network Interception:** Bypasses UI bugs and layout changes.
-* **Batch Processing:** Handles 50k+ artists with session persistence.
 
-## 📦 Installation & Usage
-1. `pip install -r requirements.txt`
-2. `playwright install chromium`
-3. `python src/setup_auth.py` (Login once manually)
-4. `python src/extract_instagrams.py` (Run the extractor)
+* **Sonic DNA Analysis:**
+    * Uses **Google Gemini 2.5 Flash** (via LangChain) to listen to audio files.
+    * Extracts Style (Trap, Drill, Boombap, etc.), Vibe (Dark, Chill, Hype), and BPM.
+    * Generates a rich musical description of the track.
+* **Smart Artist Matching:**
+    * Matches the analyzed "Sonic DNA" against your artist database/CRM.
+    * (MVP) Filters artists based on Style and Vibe compatibility.
+* **Outreach Helper:**
+    * Automatically generates personalized pitch messages (Instagram DMs/Emails) based on the beat's characteristics.
 
-## ⚠️ Disclaimer
-For educational and portfolio purposes (BeatMachAI Project).
+## 🛠️ Tech Stack
+
+* **Frontend:** Streamlit
+* **AI Engine:** LangChain + Google Gemini 2.5 Flash (`langchain-google-genai`)
+* **Language:** Python 3.10+
+
+## ⚙️ Setup & Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/jraphaelbarbosa/beatmatch-ai-core.git
+    cd beatmatch-ai-core
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+3.  **Environment Variables:**
+    Create a `.env` file in the root directory and add your Google AI Studio key:
+    ```env
+    AUDIO_AGENT_API_KEY=your_google_api_key_here
+    ```
+
+4.  **Run the App:**
+    ```bash
+    streamlit run src/app.py
+    ```
+
+## ⚠️ Important Note
+This project uses the **Gemini 2.5 Flash** model. Ensure your API Key has access to the latest Google Generative AI models.
