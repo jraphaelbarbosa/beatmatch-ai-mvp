@@ -1,5 +1,7 @@
 # 🎧 BeatMatchAI (MVP)
 
+> **[ 🇧🇷 Ler em Português ](README.pt-br.md)**
+
 **Sonic Identity Matching System for Music Producers**
 
 BeatMatchAI is an intelligent tool designed to streamline the music outreach process. It uses advanced AI Agents to listen to your beats, analyze their "Sonic DNA", and match them with the most suitable artists from your database.
@@ -28,8 +30,8 @@ Stop sending DMs in the dark. Let AI find the perfect match for your sound.
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/jraphaelbarbosa/beatmatch-ai-core.git
-    cd beatmatch-ai-core
+    git clone https://github.com/jraphaelbarbosa/beatmatch-ai-mvp.git
+    cd beatmatch-ai-mvp
     ```
 
 2.  **Install dependencies:**
