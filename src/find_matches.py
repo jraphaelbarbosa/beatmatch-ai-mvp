@@ -1,5 +1,5 @@
-import os
 from src.db_manager import DatabaseManager
+
 
 class ArtistMatcher:
     def __init__(self, db_manager=None):
@@ -52,45 +52,44 @@ class ArtistMatcher:
         """
         
         try:
-            with self.db.get_connection() as conn:
-                with conn.cursor() as cur:
-                    # --- Step 1: Strict Search ---
-                    cur.execute(query_strict, (style, vibe, limit))
-                    rows_strict = cur.fetchall()
+            with self.db.get_connection() as conn, conn.cursor() as cur:
+                # --- Step 1: Strict Search ---
+                cur.execute(query_strict, (style, vibe, limit))
+                rows_strict = cur.fetchall()
+                
+                results = []
+                found_ids = []
+                
+                for row in rows_strict:
+                    # row structure: 0=id, 1=name, 2=handle, 3=genres, 4=popularity
+                    results.append({
+                        "name": row[1],
+                        "handle": row[2] if row[2] else "N/A",
+                        "matched_genres": row[3],
+                        "popularity": row[4],
+                        "match_type": "PERFECT"
+                    })
+                    found_ids.append(row[0])
+
+                # --- Step 2: Broad Fallback (if needed) ---
+                if len(results) < 5:
+                    remaining_slots = limit - len(results)
+                    # Safety: Ensure exclusion list is not empty for SQL syntax
+                    exclusion_ids = found_ids if found_ids else ['']
                     
-                    results = []
-                    found_ids = []
+                    cur.execute(query_broad, (style, exclusion_ids, remaining_slots))
+                    rows_broad = cur.fetchall()
                     
-                    for row in rows_strict:
-                        # row structure: 0=id, 1=name, 2=handle, 3=genres, 4=popularity
+                    for row in rows_broad:
                         results.append({
                             "name": row[1],
                             "handle": row[2] if row[2] else "N/A",
                             "matched_genres": row[3],
                             "popularity": row[4],
-                            "match_type": "PERFECT"
+                            "match_type": "BROAD_STYLE"
                         })
-                        found_ids.append(row[0])
-
-                    # --- Step 2: Broad Fallback (if needed) ---
-                    if len(results) < 5:
-                        remaining_slots = limit - len(results)
-                        # Safety: Ensure exclusion list is not empty for SQL syntax
-                        exclusion_ids = found_ids if found_ids else ['']
                         
-                        cur.execute(query_broad, (style, exclusion_ids, remaining_slots))
-                        rows_broad = cur.fetchall()
-                        
-                        for row in rows_broad:
-                            results.append({
-                                "name": row[1],
-                                "handle": row[2] if row[2] else "N/A",
-                                "matched_genres": row[3],
-                                "popularity": row[4],
-                                "match_type": "BROAD_STYLE"
-                            })
-                            
-                    return results
+                return results
 
         except Exception as e:
             print(f"Error querying database: {e}")

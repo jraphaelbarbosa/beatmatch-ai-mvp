@@ -1,7 +1,8 @@
+import json
 import os
 import sys
-import json
 import time
+
 import google.generativeai as genai
 from dotenv import load_dotenv
 

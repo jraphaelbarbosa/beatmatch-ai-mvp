@@ -3,7 +3,7 @@ Pytest global fixtures and configurations for BeatMatch AI MVP.
 """
 
 import pytest
-from src.models.schemas import AudioAnalysisResult, ArtistMatchResult
+from src.models.schemas import ArtistMatchResult, AudioAnalysisResult
 
 
 @pytest.fixture

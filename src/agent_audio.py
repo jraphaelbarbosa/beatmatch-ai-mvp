@@ -1,9 +1,10 @@
-import os
 import json
+import os
 import time
+
 import google.generativeai as genai
-from langchain_google_genai import ChatGoogleGenerativeAI
 from dotenv import load_dotenv
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 # Load env vars
 load_dotenv()
@@ -24,12 +25,9 @@ def clean_json_string(json_str):
     """
     cleaned = json_str.strip()
     # Remove markdown code blocks if present
-    if cleaned.startswith("```json"):
-        cleaned = cleaned[7:]
-    if cleaned.startswith("```"):
-        cleaned = cleaned[3:]
-    if cleaned.endswith("```"):
-        cleaned = cleaned[:-3]
+    cleaned = cleaned.removeprefix("```json")
+    cleaned = cleaned.removeprefix("```")
+    cleaned = cleaned.removesuffix("```")
     return cleaned.strip()
 
 def analyze_audio_with_langchain(file_path, mock_mode=False):

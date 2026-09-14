@@ -4,7 +4,7 @@ Unit tests for data contracts in BeatMatch AI MVP.
 
 import pytest
 from pydantic import ValidationError
-from src.models.schemas import AudioAnalysisResult, ArtistMatchResult
+from src.models.schemas import AudioAnalysisResult
 
 
 def test_audio_analysis_valid(sample_audio_analysis):

@@ -3,7 +3,7 @@ Unit tests for cascading artist matching logic in BeatMatch AI MVP.
 """
 
 from unittest.mock import MagicMock
-import pytest
+
 from src.find_matches import ArtistMatcher
 
 

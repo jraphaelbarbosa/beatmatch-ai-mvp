@@ -1,7 +1,6 @@
 
-import os
-import sys
 import logging
+
 from db_manager import DatabaseManager
 
 # Setup basic logging
@@ -61,11 +60,10 @@ def run_normalization():
     );
     """
     
-    with db.get_connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute(drop_sql)
-            cur.execute(create_sql)
-            logging.info("Table `genre_mappings` (re)created successfully.")
+    with db.get_connection() as conn, conn.cursor() as cur:
+        cur.execute(drop_sql)
+        cur.execute(create_sql)
+        logging.info("Table `genre_mappings` (re)created successfully.")
 
     # 2. Extract Unique Genres from Artists
     logging.info("Fetching unique genres from `artists` table...")
@@ -76,11 +74,10 @@ def run_normalization():
     """
     
     unique_genres = []
-    with db.get_connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute(fetch_genres_sql)
-            rows = cur.fetchall()
-            unique_genres = [r[0] for r in rows if r[0]]
+    with db.get_connection() as conn, conn.cursor() as cur:
+        cur.execute(fetch_genres_sql)
+        rows = cur.fetchall()
+        unique_genres = [r[0] for r in rows if r[0]]
             
     logging.info(f"Found {len(unique_genres)} unique genres.")
 
@@ -109,10 +106,9 @@ def run_normalization():
     
     if mappings_to_insert:
         from psycopg2.extras import execute_values
-        with db.get_connection() as conn:
-            with conn.cursor() as cur:
-                execute_values(cur, insert_sql, mappings_to_insert)
-                logging.info(f"Inserted/Updated {len(mappings_to_insert)} genre mappings.")
+        with db.get_connection() as conn, conn.cursor() as cur:
+            execute_values(cur, insert_sql, mappings_to_insert)
+            logging.info(f"Inserted/Updated {len(mappings_to_insert)} genre mappings.")
     else:
         logging.info("No genres to insert.")
 
@@ -121,19 +117,18 @@ def run_normalization():
 
 def verify_output():
     db = DatabaseManager()
-    with db.get_connection() as conn:
-        with conn.cursor() as cur:
-            logging.info("\n--- Verification: 10 Mapped Examples ---")
-            query = """
+    with db.get_connection() as conn, conn.cursor() as cur:
+        logging.info("\n--- Verification: 10 Mapped Examples ---")
+        query = """
                 SELECT raw_genre, master_style, vibe 
                 FROM genre_mappings 
                 WHERE is_mapped = TRUE 
                 LIMIT 10;
             """
-            cur.execute(query)
-            rows = cur.fetchall()
-            for r in rows:
-                print(f"Genre: {r[0]} | Style: {r[1]} | Vibe: {r[2]}")
+        cur.execute(query)
+        rows = cur.fetchall()
+        for r in rows:
+            print(f"Genre: {r[0]} | Style: {r[1]} | Vibe: {r[2]}")
                 
             # Also show some unmapped ones?
             # query_unmapped = "SELECT raw_genre FROM genre_mappings WHERE is_mapped = FALSE LIMIT 5;"

@@ -1,8 +1,9 @@
 import os
-import psycopg2
-from psycopg2.extras import execute_values
 from contextlib import contextmanager
+
+import psycopg2
 from dotenv import load_dotenv
+from psycopg2.extras import execute_values
 
 load_dotenv()
 
@@ -37,10 +38,9 @@ class DatabaseManager:
         with open(schema_file, "r") as f:
             sql_script = f.read()
             
-        with self.get_connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute(sql_script)
-                print("Database initialized successfully.")
+        with self.get_connection() as conn, conn.cursor() as cur:
+            cur.execute(sql_script)
+            print("Database initialized successfully.")
 
     def upsert_artists(self, artists_data):
         """
@@ -58,10 +58,9 @@ class DatabaseManager:
                 outreach_status = EXCLUDED.outreach_status,
                 raw_genres = EXCLUDED.raw_genres;
         """
-        with self.get_connection() as conn:
-            with conn.cursor() as cur:
-                execute_values(cur, query, artists_data)
-                print(f"Upserted {len(artists_data)} artists.")
+        with self.get_connection() as conn, conn.cursor() as cur:
+            execute_values(cur, query, artists_data)
+            print(f"Upserted {len(artists_data)} artists.")
 
     def upsert_contacts(self, contacts_data):
         """
@@ -78,7 +77,6 @@ class DatabaseManager:
                 validation_status = EXCLUDED.validation_status,
                 last_checked = CURRENT_TIMESTAMP;
         """
-        with self.get_connection() as conn:
-            with conn.cursor() as cur:
-                execute_values(cur, query, contacts_data)
-                print(f"Upserted {len(contacts_data)} contacts.")
+        with self.get_connection() as conn, conn.cursor() as cur:
+            execute_values(cur, query, contacts_data)
+            print(f"Upserted {len(contacts_data)} contacts.")

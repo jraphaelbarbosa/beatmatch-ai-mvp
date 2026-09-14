@@ -4,6 +4,7 @@ Enforces validation and serialization using Pydantic v2.
 """
 
 from typing import Literal
+
 from pydantic import BaseModel, Field
 
 
