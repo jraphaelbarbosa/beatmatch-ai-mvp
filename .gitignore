@@ -1,19 +1,24 @@
-# Ignore everything by default
-*
-
-# Whitelist App Core (Directories and their contents)
+﻿# Whitelist files
 !src/
 !src/**
+!tests/
+!tests/**
+!.github/
+!.github/**
+!scripts/
+!scripts/**
 !requirements.txt
 !.gitignore
 !README.md
+!README.pt-br.md
 !.env.example
 !data/
 !data/**
 
-# Re-ignore strict exclusions (override whitelists)
+# Ignore strict exclusions
 __pycache__/
 *.pyc
+.pytest_cache/
 .DS_Store
 .env
 venv/
